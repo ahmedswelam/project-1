@@ -14,5 +14,4 @@ $dbName = "fairouzdb";
        die("Error : ".mysqli_connect_error());
    }
 
-
 ?>

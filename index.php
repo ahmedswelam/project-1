@@ -1,153 +1,88 @@
 <?php 
-session_start();
 
-    require './helpers/dbConnection.php';
-    require './helpers/functions.php';
-   //require 'checkLogin.php';
-    //require 'checkadmin.php';
-        require './layouts/header.php';
-        require './layouts/navbar.php';
+  require './helpers/dbConnection.php';
+  require './helpers/functions.php';
+  //require 'checkadmin.php';
+  require 'checkLogin.php';
 
 
-    /*if(isset($_SESSION['role_id']) == 1 ){
-       require './layouts/header.php';
-    }elseif(isset($_SESSION['role_id']) != 1){
-        require './layouts/userheader.php';
-    }*/
+  # DB OP
+  $sql = "SELECT * FROM users";
+  /*'select seller.* , category.title as CatTitle , users.name from seller  inner join category  on articles.cat_id = category.id 
+  inner  join users on articles.added_by = users.id';*/
+  
+  
+  $op = mysqli_query($con, $sql);
+ 
 
-    # Fetch category Data .... 
-    $category = "select * from category";
-    $op  = mysqli_query($con,$category);
-
-    # Fetch product Data .... 
-    $product = "select * from product";
-    $op1  = mysqli_query($con,$product);
-
-
+  require './layouts/header.php';
+  require './layouts/navbar.php';
+  require './layouts/sidebar.php';
 
 
 
 ?>
+<div class="container-fluid">
+  <div class="row">
 
-    <!-- Start Top Search -->
-    <div class="top-search">
-        <div class="container">
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control" placeholder="Search">
-                <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
-            </div>
-        </div>
-    </div>
-    <!-- End Top Search -->
+    
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
 
-    <!-- Start Slider -->
-    <div id="slides-shop" class="cover-slides">
-        <ul class="slides-container">
-            <li class="text-center">
-                <img src="images/b1.jpg" alt="">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>أهلا بك في  <br> سوق الفيروز</strong></h1>
-                            <p class="m-b-40">يقدم لكم سوق الفيروز عدد من المنتجات السيناوية <br>
-                            ذات الجودة العالية و الخامات المتميزة</p>
-                            <p><a class="btn hvr-hover" >استمتع الان بالتسوق</a></p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="text-center">
-                <img src="images/b2.jpg" alt="">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>أهلا بك في  <br> سوق الفيروز</strong></h1>
-                            <p class="m-b-40">يقدم لكم سوق الفيروز عدد من المنتجات السيناوية <br>
-                            ذات الجودة العالية و الخامات المتميزة</p>
-                            <p><a class="btn hvr-hover" >استمتع الان بالتسوق</a></p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <!-- End Slider -->
+      <h2>Users Data</h2>
+      <div class="btn-group me-2">
+          <a href='create.php' class="btn btn-sm btn-outline-secondary">Add New User</a>
+      </div>
+      <div class="table-responsive">
 
-    <!-- Start Categories  -->
-    <div class="categories-shop">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">name</th>
+              <th scope="col">email</th>
+              <th scope="col">phone</th>
+              <th scope="col">address</th>
+              <th scope="col">image</th>
+              <th scope="col">info</th>
+              <th scope="col">Edit/Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+          <?php 
+                                            
+            while($data = mysqli_fetch_assoc($op)){
+                                               
+           ?>
+            <tr>
 
-        <div class="container">
-                <p style="text-align: center;font-size: x-large;font-weight: bold;">الاقسام</p> <br> <hr>
-            <div class="row">
-                    <?php 
-                                                        
-                        while($data = mysqli_fetch_assoc($op)){                                                                    
-                    ?>
-                        <div class="shop-cat-box">
-                            <img class="img-fluid" src="../Dashboard/category/uploads/<?php echo $data['image']; ?>" alt="" />
-                            <a class="btn hvr-hover" href="#"><?php echo $data['title']; ?></a>
-                        </div>
-                    <?php } ?>
-            </div>
-        </div>
-    </div>
-    <!-- End Categories -->
+            <td><?php echo $data['id']; ?></td>
+              <td><?php echo $data['name']; ?></td>
+              <td><?php echo $data['email']; ?></td>
+              <td><?php echo $data['phone']; ?></td>
+              <td><?php echo $data['address']; ?></td>
+              <td><img src="./uploads/<?php echo $data['image']; ?>" width="45" height="45"></td>
+              <td><?php echo $data['about']; ?></td>
+              <td>
+                <a href='delete.php?id=<?php echo $data['id']; ?>'
+                  class='btn btn-danger m-r-1em'>Delete</a>
+                <a href='edit.php?id=<?php echo $data['id']; ?>'
+                  class='btn btn-primary m-r-1em'>Edit</a>
+              </td>
+            </tr>
+            <?php } ?>
 
-    <!-- Start Products  -->
-    <div class="products-box">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="title-all text-center">
-                        <h1>منتجاتنا المميزة</h1>
-                        <p>نقدم لكم مجموعة متميزة من المنتجات السيناوية</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="special-menu text-center">
-                        <div class="button-group filter-button-group">
-                            <button class="active" data-filter="*">الكل</button>
-                            <button data-filter=".top-featured">الاكثر مبيعاً</button>
-                            <button data-filter=".best-seller">العروض</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </tbody>
+        </table>
+
+      </div>
+    </main>
+
+  </div>
+</div>
 
 
-            <div class="row">
-            <?php 
-                                                    
-                                                    while($data = mysqli_fetch_assoc($op1)){
-                                                                                                                                                                                                                                
-                                                ?>  
-                <div class="col-lg-4 col-md-8 special-grid best-seller" style="position: initial; left: 0px; top: 0px;">
-  
+    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 
-                        <div class="card" style="width: 18rem;">
-                            <img src="../Dashboard/product/uploads/<?php echo $data['image']; ?>" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h3 class="card-title"><?php echo $data['name']; ?></h3>
-                                <p class="card-text"><?php echo $data['description']; ?></p>
-                                <p class="card-text"><?php echo $data['price']; ?></p>
-                                <a href="cart.php" class="btn btn-primary">أضف الي السلة</a>
-                            </div>
-                        </div>
-                   
-                </div>
-                <?php } ?>
-            </div>
-            
-        </div>
-    </div>
-    <!-- End Products  -->
-
-
-
-    <?php 
-               
-        require './layouts/footer.php';
-    ?>
+      <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script><script src="dashboard.js"></script>
+  </body>
+</html>

@@ -60,30 +60,8 @@ function validate($input,$flag){
 
 function url($url){
 
- return   "http://".$_SERVER['HTTP_HOST']."/fairouz".$url; 
+ return   "http://".$_SERVER['HTTP_HOST']."/fairouz/Dashboard".$url; 
 
 }
-
-function count_digit($number) {
-    return strlen($number);
-  }
-
-
-
-
-  function lognin_area(){
-        echo '
-            <div class="our-link">
-                <ul>
-                    <li><a>         Welcome   </a></li>
-                    <li><a href="#">My Account</a></li>
-                    <li><a href="#">Our location</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                </ul>
-            </div>
-        
-        ';
-}
-
 
 ?>
